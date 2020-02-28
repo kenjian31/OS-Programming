@@ -3,7 +3,18 @@
 #include <unistd.h>
 
 void cd(char* arg){
-	/*insert code here*/
+	if (chdir(arg) != 0){
+		char buf[100];
+		printf("1111");
+		printf("%s\n",getcwd(buf, sizeof(buf)));
+		perror("bash: cd");}
+	else{
+		char buf[100];
+		chdir(arg);
+		getcwd(buf, sizeof(buf));
+		printf("%s\n", buf);
+	}
+
 }
 
 int main(int argc, char** argv){
