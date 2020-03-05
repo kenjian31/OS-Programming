@@ -11,7 +11,7 @@
 
 #include "util.h"
 
-int run(char *token, char *root) {
+void run(char *token, char *root) {
 	// write(STDOUT_FILENO, "Running: ", 9);
 	// write(STDOUT_FILENO, token, strlen(token));
 	// write(STDOUT_FILENO, "\n", 1);
@@ -47,6 +47,7 @@ int run(char *token, char *root) {
 	}
 
 	parse_line(cmd, args, " ");
+	char exe[_POSIX_ARG_MAX+strlen(root)+1];
 	enum command_type cmd_type;
 	cmd_type = get_command_type(args[0]);
 
@@ -56,20 +57,21 @@ int run(char *token, char *root) {
 		case CD:
 			exit(101);
 		case LS:
-
 		case WC:
-
+			strcpy(exe, root);
+			strcat(exe, "/");
 		default:
-			if (execvp(args[0], args)==-1) {
+			strcat(exe, args[0]);
+			if (execvp(exe, args)==-1) {
 				write(STDERR_FILENO, "Command not found: ", 19);
 				write(STDERR_FILENO, args[0], strlen(args[0]));
 				write(STDERR_FILENO, "\n", 1);
 			}
 	}
-	return 0;
+	return;
 }
 
-int finish(int status, char *token, char *prev){
+void finish(int status, char *token, char *prev){
 	switch (status) {
 		case 100: 
 			exit(0);
@@ -87,7 +89,7 @@ int finish(int status, char *token, char *prev){
 				write(STDERR_FILENO, "\n", 1);
 			}
 		default:
-			break;
+			return;
 	}
 }
 
@@ -101,6 +103,7 @@ int main(){
 	char path[FILENAME_MAX];
 	char root[FILENAME_MAX];
 	char prev[FILENAME_MAX];
+	char temp[FILENAME_MAX];
 	if (getcwd(root, FILENAME_MAX) == NULL) {
 			write(STDERR_FILENO, "Unable to get current directory, exiting...\n", 44);
 			exit(1);
@@ -144,6 +147,7 @@ int main(){
 				exit(0);
 			}
 			wait(&status1);
+			finish(WEXITSTATUS(status1), token1, prev);
 		} else if (token1 != NULL && token2 != NULL) {
 			int fd[2];
     		pipe(fd);
@@ -164,11 +168,13 @@ int main(){
 			close(fd[0]);
 			close(fd[1]);
 			wait(&status1);
+			finish(WEXITSTATUS(status1), token1, prev);
 			wait(&status2);
+			finish(WEXITSTATUS(status2), token2, prev);
 		}
-		finish(WEXITSTATUS(status1), token1, prev);
-		finish(WEXITSTATUS(status2), token2, prev);
-		strcpy(prev, path);
+		getcwd(temp, FILENAME_MAX);
+		if (strcmp(temp, path) != 0)
+			strcpy(prev, path);
 	}
 	
 }
