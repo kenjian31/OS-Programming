@@ -19,16 +19,15 @@ void ls(char *path, bool recurse_flag)
 // no -R flag, no path
 	if(path == NULL && recurse_flag == false)
 	{
-		// printf("dadad\n");
-		// dir == opendir(".");
 		if(!(dir = opendir(".")))
 		{
 			printf("cannot access %s: No such file or directory\n", path);
 			return;
 		}
-		else
-		{
-			while((directory = readdir(dir)) != NULL)
+		// printf("dadad\n");
+			dir == opendir(".");
+			// chdir(dir);
+			while((directory = readdir(dir)))
 			{
 				if(strncmp(directory->d_name, ".", 1) == 0)
 				{
@@ -36,21 +35,17 @@ void ls(char *path, bool recurse_flag)
 				}
 				printf("%s  ", directory->d_name);
 
-				if(stat(directory->d_name, &buff) >= 0 && S_ISDIR(buff.st_mode))
-				{
-					ls(directory->d_name, false);
-				}
+				// if(stat(directory->d_name, &buff) >= 0 && S_ISDIR(buff.st_mode))
+				// {
+				// 	ls(directory->d_name, false);
+				// }
 			}
 		printf("\n");
-    }
 	 closedir(dir);
 	}
 
 	else
 	{
-
-
-
 		//have -R flag, no path
 		if(path == NULL && recurse_flag == true)
 		{
@@ -88,24 +83,24 @@ void ls(char *path, bool recurse_flag)
 			}
 		}
 
-		if((dir=opendir(path)) == NULL)
-		{
-			printf("cannot access %s: No such file or directory\n", path);
-			return;
-		}
+
 
 
 
   // No -R, path given
 	if(path && recurse_flag == false)
 	{
-
+		if((dir=opendir(path)) == NULL)
+		{
+			printf("cannot access %s: No such file or directory\n", path);
+			return;
+		}
 		while((directory = readdir(dir)) != NULL)
 		{
-			if(strncmp(directory->d_name, ".", 1) == 0)
-			{
-				continue;
-			}
+			// if(strncmp(directory->d_name, ".", 1) == 0)
+			// {
+			// 	continue;
+			// }
 
 			if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
 				continue;
@@ -126,7 +121,11 @@ void ls(char *path, bool recurse_flag)
 //  -R flag with some path name
 	if(path && recurse_flag == true)
 	{
-
+		if((dir=opendir(path)) == NULL)
+		{
+			printf("cannot access %s: No such file or directory\n", path);
+			return;
+		}
 		chdir(path);
 		// printf("%s: ", path);
 					// printf("%s\n", path);
