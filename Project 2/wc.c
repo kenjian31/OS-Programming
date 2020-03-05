@@ -7,17 +7,31 @@
 #include <ctype.h>
 
 void wc(int mode, char* path){
-	// if (path == NULL){	//take input from STDIN
-	// 	char fp[200], c;
-	//
-	// 	scanf("%s", fp);
-	// 	while (getchar()) != '\0'
-	//
-	// 	return ;
-	// 	}
+	 if (path == NULL){	//take input from STDIN
+				int count_line, count_word, count_char = 0;
+				char c;
+				int s = 0;
+				int i = 0;
+				while((c = getchar()) != EOF){
+					count_char +=1 ;
+				 	if(c =='\n'){
+					 	count_line += 1;}
+				 if (!isspace(c) && s == 0){
+						count_word+=1;
+						s = 1;
+					}
+					else if(isspace(c)){
+						 s = 0;
+						}
+			 }
+			 if(mode == 0) {
+			 printf("%8d", count_line);
+			 printf("%8d", count_word);
+			 printf("%8d\n", count_char);}
 
-	//}
-	//else{
+	}
+
+	else{
 	struct stat stat_buf;
 	stat(path,&stat_buf);
 	//check if path is a directory
@@ -25,7 +39,6 @@ void wc(int mode, char* path){
 		printf("wc: %s: it is a directory\n",path);
 		return;
 	}
-	//}
 
 	//check if path is regular file
 	else if(S_ISREG(stat_buf.st_mode)){
@@ -77,56 +90,36 @@ void wc(int mode, char* path){
 
 		else if (mode == 0){
 			//line count
-				int count_line = 0;
-				char buf[200];
-				while(fgets(buf,200,fp) != NULL){
-					count_line +=1 ;
-				}
-				printf("%8d", count_line);
-
-			//word count
-				FILE* fp1 = fopen(path,"r");
-				int count_word = 0;
+				int count_line, count_word, count_char = 0;
 				char c;
-				int s = 0; // s = 0 represent it is the first space
-				while ((c = getc (fp1)) != EOF)
-				{
-						if (!isspace(c) && s == 0){
-							count_word+=1;
-							s = 1;
-						}
-						else if(isspace(c)){
-							s = 0;
-						}
-				}
-				fclose(fp1);
-				printf("%8d", count_word);
-
-			//char count
-				FILE* fp2 = fopen(path,"r");
-				int count_char = 0;
-				char m;
-				while ((m = fgetc(fp2)) != EOF) {
-						count_char += 1;
-					}
-				printf("%8d %s\n", count_char, path);
-				return;
-				fclose(fp2);
-		}
-		fclose(fp);
+				int s = 0;
+				int i = 0;
+				while((c = fgetc(fp)) != EOF){
+					count_char +=1 ;
+					if(c =='\n'){
+			 			count_line += 1;}
+					if (!isspace(c) && s == 0){
+								count_word+=1;
+								s = 1;
+							}
+					else if(isspace(c)){
+								s = 0;
+							}
+			}
+			printf("%8d", count_line);
+			printf("%8d", count_word);
+			printf("%8d %s\n", count_char, path);
 	}
-
 
 	//if path is other types
 	else{
 		perror("Invalid path");
 	}
-
-
-	// if (mode == 0){
-	//
-	// }
+	fclose(fp);
 }
+}
+}
+
 
 int main(int argc, char** argv){
 	if(argc>2){
