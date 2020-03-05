@@ -144,10 +144,10 @@ void ls(char *path, bool recurse_flag)
 
             if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
               continue;
-						printf("%s/: ", path);
+						printf("%s/", path);
             printf("%s/: \n", directory->d_name);
 						ls(directory->d_name, recurse_flag);
-
+						printf("\n");
         }
 				// printf("/%s/: \n", path);
         if(!(S_IFDIR &buff.st_mode))
