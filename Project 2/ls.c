@@ -15,6 +15,7 @@ void ls(char *path, bool recurse_flag)
   struct dirent *directory;
 	struct stat buff;
 
+
 // no -R flag, no path
 	if(path == NULL && recurse_flag == false)
 	{
@@ -47,10 +48,13 @@ void ls(char *path, bool recurse_flag)
 
 	else
 	{
+
+
+
 		//have -R flag, no path
 		if(path == NULL && recurse_flag == true)
 		{
-			// dir == ".";
+
 			if(!(dir = opendir(".")))
 			{
 				printf("cannot access %s: No such file or directory\n", path);
@@ -75,7 +79,7 @@ void ls(char *path, bool recurse_flag)
 						else
 						{
 							recurse_flag == false;
-							printf("%s\t", directory->d_name);
+							printf("%s  ", directory->d_name);
 						}
 				}
 				printf("\n");
@@ -84,56 +88,28 @@ void ls(char *path, bool recurse_flag)
 			}
 		}
 
-		// dir = opendir(path);
-
-  	else if(!(dir = opendir(path)))
+		if((dir=opendir(path)) == NULL)
 		{
 			printf("cannot access %s: No such file or directory\n", path);
 			return;
 		}
-		// printf("%s\n", path);
-
-		else if(path == NULL && recurse_flag == true)
-		{
-			// dir = opendir(path[2]);
-    	// printf("asdasd\n");
-
-			chdir(path);
-    	while((directory = readdir(dir)) != NULL)
-    	{
-        	lstat(directory->d_name, &buff);
-        	if(S_IFDIR &buff.st_mode)
-        	{
-						// recurse_flag == true;
-            	if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
-              continue;
-
-            	printf("%s/\n", directory->d_name);
-							ls(directory->d_name, true);
-
-        	}
-        	else
-					{
-						recurse_flag == false;
-          	printf("%s\t", directory->d_name);
-					}
-    	}
-			printf("\n");
-    	chdir("..");
-    	closedir(dir);
-		}
 
 
-  //No -R flag, have path
-	else if(path[1] && recurse_flag == false)
+
+  // No -R, path given
+	if(path && recurse_flag == false)
 	{
+
 		while((directory = readdir(dir)) != NULL)
 		{
 			if(strncmp(directory->d_name, ".", 1) == 0)
 			{
 				continue;
 			}
-			// strcpy(filename[len++], directory->d_name);
+
+			if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
+				continue;
+
 			printf("%s  ", directory->d_name);
 
 			if(stat(directory->d_name, &buff) >= 0 && S_ISDIR(buff.st_mode))
@@ -148,29 +124,40 @@ void ls(char *path, bool recurse_flag)
 
 
 //  -R flag with some path name
-	else if(path[2] && recurse_flag == true)
+	if(path && recurse_flag == true)
 	{
-		// dir = opendir(path[2]);
-    // printf("asdasd\n");
+
 		chdir(path);
-    while((directory = readdir(dir)) != NULL)
+		// printf("%s: ", path);
+					// printf("%s\n", path);
+		while((directory = readdir(dir)) != NULL)
     {
+
         lstat(directory->d_name, &buff);
+
         if(S_IFDIR &buff.st_mode)
         {
-					// recurse_flag == true;
+					if(strncmp(directory->d_name, ".", 1) == 0)
+					{
+						continue;
+					}
+
             if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
               continue;
-
-            printf("%s/\n", directory->d_name);
-						ls(directory->d_name, true);
+						printf("%s/: ", path);
+            printf("%s/: \n", directory->d_name);
+						ls(directory->d_name, recurse_flag);
 
         }
-        else
+				// printf("/%s/: \n", path);
+        if(!(S_IFDIR &buff.st_mode))
+				// else
 				{
 					recurse_flag == false;
-          printf("%s\t", directory->d_name);
+
+          printf("%s  ", directory->d_name);
 				}
+				// printf("\n");
     }
 		printf("\n");
     chdir("..");
@@ -185,7 +172,7 @@ int main(int argc, char *argv[])
 {
 	if(argc < 2)
 	{ // No -R flag and no path name
-		// printf("in\n");
+
 		ls(NULL, false);
 	}
 
@@ -193,19 +180,20 @@ int main(int argc, char *argv[])
 	{
 		if(argc == 2)
 		{ // only -R flag
+			// printf("dasdadadasda\n");
 			ls(NULL, true);
 		}
 
 		else
 		{ // -R flag with some path name
-     	// printf("1122");
+
 			ls(argv[2], true);
 
 		}
 	}
 	else
 	{ // no -R flag but path name is given
-      // printf("sda\n");
+
 			ls(argv[1], false);
 
 
