@@ -1,6 +1,6 @@
  # CSCI4061 Project 2
 
- This first part of the project involved implementation of Unix commands: *cd*, *ls* and *wc*.
+ This first part of the project involved implementation of Unix commands: *cd*, *ls* and *wc*.  
  The second part provide a shell allows commands running, file redirection and pipes. 
  ## Unix commands
  
@@ -27,7 +27,7 @@ For example,
  ```
  
  ### wc
-Find the line,word and character count of a file. *wc -l* print the number of lines, *wc -w* print the number of words and *wc -c* print the number of characters.
+Find the line,word and character count of a file. *wc -l* print the number of lines, *wc -w* print the number of words and *wc -c* print the number of characters.  
 If no file is specified, *wc* will take input from STDIN. 
 For example,
 ```
@@ -63,7 +63,7 @@ will search for the word ‘student’ in the output of ‘cat data.txt’, whic
 ```
 
 ### Contributor
-Zhou Zhuang: Shell, File redirection, Pipes, exit
-Jian Wang: ls
-Fei Gao: cd, wc
+Zhou Zhuang: Shell, File redirection, Pipes, exit. 
+Jian Wang: ls. 
+Fei Gao: cd, wc. 
  
