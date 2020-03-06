@@ -63,6 +63,10 @@ void ls(char *path, bool recurse_flag)
 						lstat(directory->d_name, &buff);
 						if(S_IFDIR &buff.st_mode)
 						{
+							if(strncmp(directory->d_name, ".", 1) == 0)
+							{
+								continue;
+							}
 							// recurse_flag == true;
 								if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
 									continue;
@@ -74,6 +78,10 @@ void ls(char *path, bool recurse_flag)
 						else
 						{
 							recurse_flag == false;
+							if(strncmp(directory->d_name, ".", 1) == 0)
+							{
+								continue;
+							}
 							printf("%s  ", directory->d_name);
 						}
 				}
@@ -97,10 +105,10 @@ void ls(char *path, bool recurse_flag)
 		}
 		while((directory = readdir(dir)) != NULL)
 		{
-			// if(strncmp(directory->d_name, ".", 1) == 0)
-			// {
-			// 	continue;
-			// }
+			if(strncmp(directory->d_name, ".", 1) == 0)
+			{
+				continue;
+			}
 
 			if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
 				continue;
@@ -153,6 +161,10 @@ void ls(char *path, bool recurse_flag)
 				// else
 				{
 					recurse_flag == false;
+					if(strncmp(directory->d_name, ".", 1) == 0)
+					{
+						continue;
+					}
 
           printf("%s  ", directory->d_name);
 				}
