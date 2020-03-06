@@ -1,9 +1,5 @@
- #CSCI4061Project 2
- ##Contributor
- Zhou Zhuang: Shell, File redirection, Pipes, exit
- Jian Wang: ls
- Fei Gao: cd wc
- 
+ # CSCI4061Project 2
+
  This first part of the project involved implementation of Unix commands: *cd*, *ls* and *wc*.
  The second part provide a shell allows commands running, file redirection and pipes. 
  ## Unix commands
@@ -41,4 +37,9 @@ For example,
 ./wc -c filename
 ./wc
 ```
+ 
+ ### Contributor
+ Zhou Zhuang: Shell, File redirection, Pipes, exit
+ Jian Wang: ls
+ Fei Gao: cd wc
  
