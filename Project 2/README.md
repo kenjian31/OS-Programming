@@ -60,6 +60,7 @@ will search for the word ‘student’ in the output of ‘cat data.txt’, whic
 
 ### To exit the shell
 ```
+exit
 ```
 
 ### Contributor
