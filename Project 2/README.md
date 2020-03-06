@@ -1,4 +1,4 @@
- # CSCI4061Project 2
+ # CSCI4061 Project 2
 
  This first part of the project involved implementation of Unix commands: *cd*, *ls* and *wc*.
  The second part provide a shell allows commands running, file redirection and pipes. 
@@ -37,9 +37,33 @@ For example,
 ./wc -c filename
 ./wc
 ```
- 
- ### Contributor
- Zhou Zhuang: Shell, File redirection, Pipes, exit
- Jian Wang: ls
- Fei Gao: cd wc
+## Implementation of Unix shell
+The shell implementation supports all command listed, file redirection and pipes. 
+
+To run, do
+```
+./shell
+```
+### File redirection
+The ‘>' operator will truncate the old contents in the file if any. And the ‘>>’ operator will append the new contents to the old contents of the file if any. For example,
+```
+ ls > out.txt
+```
+will redirect the output of ls command to a file named out.txt.
+
+### Pipes
+Handle one pipe between two commands. For example,
+```
+cat data.txt | grep student
+```
+will search for the word ‘student’ in the output of ‘cat data.txt’, which is the content of the file ‘data.txt’.
+
+### To exit the shell
+```
+```
+
+### Contributor
+Zhou Zhuang: Shell, File redirection, Pipes, exit
+Jian Wang: ls
+Fei Gao: cd, wc
  
