@@ -8,15 +8,17 @@
 
 void wc(int mode, char* path){
 	 if (path == NULL){	//take input from STDIN
-				int count_line, count_word, count_char = 0;
+		 		int count_char = 0;
+				int count_line = 0;
+				int count_word = 0;
 				char c;
 				int s = 0;
 				int i = 0;
 				while((c = getchar()) != EOF){
 					count_char +=1 ;
-				 	if(c =='\n'){
+				 	if(c == '\n'){
 					 	count_line += 1;}
-				 if (!isspace(c) && s == 0){
+				 	if (!isspace(c) && (s == 0)){
 						count_word+=1;
 						s = 1;
 					}
@@ -28,7 +30,6 @@ void wc(int mode, char* path){
 			 printf("%8d", count_line);
 			 printf("%8d", count_word);
 			 printf("%8d\n", count_char);}
-
 	}
 
 	else{
@@ -72,8 +73,7 @@ void wc(int mode, char* path){
 					else if(isspace(c)){
 						s = 0;
 					}
-
-		}
+			}
 			printf("%8d %s\n", count_word, path);
 			return;
 		}
@@ -90,7 +90,9 @@ void wc(int mode, char* path){
 
 		else if (mode == 0){
 			//line count
-				int count_line, count_word, count_char = 0;
+				int count_line = 0;
+				int count_word = 0;
+				int count_char = 0;
 				char c;
 				int s = 0;
 				int i = 0;
@@ -98,7 +100,7 @@ void wc(int mode, char* path){
 					count_char +=1 ;
 					if(c =='\n'){
 			 			count_line += 1;}
-					if (!isspace(c) && s == 0){
+					if (!isspace(c) && (s == 0)){
 								count_word+=1;
 								s = 1;
 							}
