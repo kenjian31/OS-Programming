@@ -7,8 +7,8 @@
 #include<sys/stat.h>
 #include<sys/types.h>
 #include <dirent.h>
-
-// int len = 0;
+char pathname[1024][1024];
+int len = 0;
 void ls(char *path, bool recurse_flag)
 {
 	DIR *dir;
@@ -152,7 +152,9 @@ void ls(char *path, bool recurse_flag)
             if (strcmp(".", directory->d_name) == 0 || strcmp("..", directory->d_name) == 0)
               continue;
 						printf("%s/", path);
-            printf("%s/: \n", directory->d_name);
+            printf("%s\n", directory->d_name);
+						strcpy(pathname[len],path);
+						strcpy(pathname[len], directory->d_name);
 						ls(directory->d_name, recurse_flag);
 						printf("\n");
         }
