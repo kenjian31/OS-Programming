@@ -27,9 +27,18 @@ void wc(int mode, char* path){
 						}
 			 }
 			 if(mode == 0) {
-			 printf("%8d", count_line);
+			 printf("%8d", count_line+1);
 			 printf("%8d", count_word);
 			 printf("%8d\n", count_char);}
+			 else if (mode == 1){
+				 printf("%8d\n", count_line+1);
+			 }
+			 else if (mode == 2){
+				 printf("%8d\n", count_word);
+			 }
+			 else if (mode == 3){
+				 printf("%8d\n", count_char);
+			 }
 	}
 
 	else{
