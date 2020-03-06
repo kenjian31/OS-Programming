@@ -63,7 +63,7 @@ will search for the word ‘student’ in the output of ‘cat data.txt’, whic
 ```
 
 ### Contributor
-Zhou Zhuang: Shell, File redirection, Pipes, exit. 
-Jian Wang: ls. 
+Zhou Zhuang: Shell, File redirection, Pipes, exit.  
+Jian Wang: ls.  
 Fei Gao: cd, wc. 
- 
+  
