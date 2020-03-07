@@ -49,11 +49,13 @@ int main(int argc, char *argv[]) {
         ls(".", false);
     } else if (argc == 2 || argc == 3) {
         if (strcmp(argv[1], "-R") == 0) {
+            // ls -R <path>
             char path[1000] = ".";
             if (argc == 3)
                 strcpy(path, argv[2]);
             ls(path, true);
         } else {
+            // ls <path>
             if (argc == 3) {
                 fprintf(stderr, "Wrong arguments.\n");
                 exit(1);

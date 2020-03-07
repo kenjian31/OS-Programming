@@ -25,8 +25,10 @@ void run(char *token, char *root) {
 	file = strtok(NULL, "");
 	if (file != NULL) {
 		if (file[0] != '>'){
+			// > mode
 			file_mode = 1;
 		} else {
+			// >> mode
 			file += 1;
 			file_mode = 2;
 		}
@@ -36,11 +38,14 @@ void run(char *token, char *root) {
 		write(STDERR_FILENO, "File not provided\n", 18);
 		exit(1);
 	}
+	// file redirection
 	if (file_mode == 2) {
+		// >> mode
 		fd = open(file, O_CREAT|O_APPEND|O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	} else if (file_mode == 1) {
+		// > mode
 		fd = open(file, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
@@ -58,6 +63,7 @@ void run(char *token, char *root) {
 			exit(101);
 		case LS:
 		case WC:
+			// add costom exe path
 			strcpy(exe, root);
 			strcat(exe, "/");
 		default:
@@ -80,8 +86,10 @@ void finish(int status, char *token, char *prev){
 			strtok(token, " ");
 			char *dir = strtok(NULL, "");
 			if ((dir == NULL) || dir[0] == '\0' || dir[0] == '~') {
+				// cd or cd ~
 				chdir(getenv("HOME"));
 			} else if (dir[0] == '-') {
+				// cd -
 				chdir(prev);
 			} else if (chdir(dir) != 0) {
 				write(STDERR_FILENO, "No such file or directory: ", 27);
@@ -96,12 +104,16 @@ void finish(int status, char *token, char *prev){
 int main(){
 	char input[_POSIX_ARG_MAX];
 	ssize_t input_len;
+	// command before |
 	char *token1 = NULL;
+	// command after |
 	char *token2 = NULL;
 	int status1 = 0;
 	int status2 = 0;
 	char path[FILENAME_MAX];
+	// exe path
 	char root[FILENAME_MAX];
+	// previous path, used for cd -
 	char prev[FILENAME_MAX];
 	char temp[FILENAME_MAX];
 	if (getcwd(root, FILENAME_MAX) == NULL) {
@@ -142,6 +154,7 @@ int main(){
 
 		// fork & exec | handle error | exit
 		if (token1 != NULL && token2 == NULL) {
+			// no pipe
 			if (fork()==0) {
 				run(token1, root);
 				exit(0);
@@ -149,6 +162,7 @@ int main(){
 			wait(&status1);
 			finish(WEXITSTATUS(status1), token1, prev);
 		} else if (token1 != NULL && token2 != NULL) {
+			// has pipe
 			int fd[2];
     		pipe(fd);
 			if (fork()==0) {
