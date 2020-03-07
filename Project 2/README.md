@@ -15,6 +15,8 @@
  ```make
  ./cd <path>
  ./cd ..
+ ./cd ~
+ ./cd -
 ```
 
  ### ls
@@ -58,13 +60,24 @@ cat data.txt | grep student
 ```
 will search for the word ‘student’ in the output of ‘cat data.txt’, which is the content of the file ‘data.txt’.
 
+### Work together
+Count outputs of ls and append to result.
+```
+ls | wc >> result
+```
+
 ### To exit the shell
 ```
 exit
 ```
 
+### Known Bugs
+1. do not support multiple pipes
+2. ^D is not supported yet
+3. ls -R will print an extra line at the bottom
+
 ### Contributor
-Zhou Zhuang: Shell, File redirection, Pipes, exit.  
+Zhou Zhuang: shell.
 Jian Wang: ls.  
-Fei Gao: cd, wc. 
+Fei Gao: wc. 
   

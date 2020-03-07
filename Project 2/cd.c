@@ -1,28 +1,38 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 void cd(char* arg){
+	char buf[1000];
 	if (chdir(arg) != 0){
-		char buf[100];
-		printf("1111");
-		printf("%s\n",getcwd(buf, sizeof(buf)));
-		perror("bash: cd");}
+		// printf("%s\n",getcwd(buf, sizeof(buf)));
+		perror("cd");
+		exit(1);}
 	else{
-		char buf[100];
-		chdir(arg);
-		getcwd(buf, sizeof(buf));
-		printf("%s\n", buf);
+		printf("%s\n", getcwd(buf, sizeof(buf)));
 	}
 
 }
 
 int main(int argc, char** argv){
-
-	if(argc<2){
-		printf("Pass the path as an argument\n");
-		return 0;
+	switch (argc) {
+		case 0:
+		case 1:
+			// cd
+			cd(getenv("HOME"));
+			break;
+		case 2:
+			// cd path
+			if (strcmp(argv[1],"~") == 0) {
+				cd(getenv("HOME"));
+			} else {
+				cd(argv[1]);
+			}
+			break;
+		default:
+			fprintf(stderr, "Too many arguments.");
+			exit(1);
 	}
-	cd(argv[1]);
 	return 0;
 }
