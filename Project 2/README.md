@@ -78,6 +78,8 @@ exit
 
 ### Contributor
 Zhou Zhuang: shell.
+
 Jian Wang: ls.  
+
 Fei Gao: wc. 
   
