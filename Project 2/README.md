@@ -16,7 +16,7 @@
  ./cd <path>
  ./cd ..
  ./cd ~
- ./cd -
+ ./cd -  // only supported in shell
 ```
 
  ### ls
@@ -72,7 +72,7 @@ exit
 ```
 
 ### Known Bugs
-1. do not support multiple pipes
+1. Do not support multiple pipes
 2. ^D is not supported yet
 3. ls -R will print an extra line at the bottom
 
