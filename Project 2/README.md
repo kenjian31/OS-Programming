@@ -77,7 +77,4 @@ exit
 3. ls -R will print an extra line at the bottom
 
 ### Contributor
-Zhou Zhuang: shell.
-Jian Wang: ls.  
-Fei Gao: wc. 
-  
+Zhou Zhuang: shell; Jian Wang: ls; Fei Gao: wc
