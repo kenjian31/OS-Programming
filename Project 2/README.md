@@ -16,7 +16,7 @@
  ./cd <path>
  ./cd ..
  ./cd ~
- ./cd -  //only supported in shell
+ ./cd -  #only supported in shell
 ```
 
  ### ls
