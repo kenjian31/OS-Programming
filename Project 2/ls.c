@@ -9,6 +9,9 @@
 #include <dirent.h>
 
 void ls(char *path, bool rec) {
+    // remove trailing '/'
+    if (strlen(path) > 1 && path[strlen(path)-1]=='/')
+        path[strlen(path)-1]='\0';
     DIR *dr = opendir(path);
     if (dr == NULL) {
         fprintf(stderr, "Failed to open: %s", path);
