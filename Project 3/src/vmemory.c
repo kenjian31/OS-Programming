@@ -24,15 +24,14 @@ int hit = 0;
 //
 
 
-// The implementation of get_vpage_cr3 is provided in 
+// The implementation of get_vpage_cr3 is provided in
 // an object file, so no need to re-implement it
-void initialize_vmanager(int policy) 
+void initialize_vmanager(int policy)
 {
 	// Set LRU policy when passsed as a parameter
 	if (policy)
 		FIFO_policy = false;
 	cr3 = get_vpage_cr3();
-	//printf("cr3: %p\n", cr3);
 }
 
 //
@@ -40,18 +39,34 @@ void initialize_vmanager(int policy)
 //
 int translate_virtual_address(unsigned int v_addr)
 {
-	//TODO
-	return -1;
+	int firstpage;
+	int secondpage;
+  int temp;
+  int physical_add;
+
+  temp = v_addr >> 12;
+  secondpage = temp & 0x3ff;
+  firstpage = temp >> 10;
+  if (cr3[firstpage] == NULL){
+    return -1;
+  }
+  physical_add = cr3[firstpage][secondpage];
+	return physical_add;
 }
 
 void print_physical_address(int frame, int offset)
 {
-	//TODO
+	if (frame == -1){
+    printf("-1\n");
+  }
+  else{
+    printf("0x%08x\n", frame+offset);
+  }
 	return;
 }
 
 int get_tlb_entry(int n)
-{	
+{
 	if (n<=0)
 		return -1;
 	lookup++;
@@ -64,7 +79,7 @@ int get_tlb_entry(int n)
 	return -1;
 }
 
-void populate_tlb(int v_addr, int p_addr) 
+void populate_tlb(int v_addr, int p_addr)
 {
 	tlb[next].key=v_addr;
 	tlb[next].val=p_addr;
