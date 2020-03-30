@@ -51,6 +51,8 @@ int main(int argc, char* argv[])
 
 
 
+
+	print_tlb();
 	while((read = getline(&cont,&length,fd)) != -1)
 	{
 		char* str;
@@ -58,23 +60,24 @@ int main(int argc, char* argv[])
 		unsigned int vadd_pn = (vadd & 0xfffff000) >> 12;
 		int offset = vadd & 0xffff00000;
 
-		print_tlb();
-
 		int mem = translate_virtual_address(vadd);
 
-		FILE * fp1 = fopen(OUT_TLB, "a");
-		if(fp1 == NULL)
-		{
-			printf("Read Error\n");
-		}
-		fprintf(fp1, "%s", text1);
-		fclose(fp1);
 
 		print_physical_address(1, offset);
 		if(get_tlb_entry(vadd_pn) == -1) {
 			populate_tlb(vadd_pn, translate_virtual_address(vadd));
 		}
 	}
+	FILE * fp1 = fopen(OUT_TLB, "a");
+	if(fp1 == NULL)
+	{
+		printf("Read Error\n");
+	}
+	fprintf(fp1, "%s", text1);
+	fclose(fp1);
+
+	print_tlb();
+
 	fclose(fd);
 	// Free the page table
 	free_resources();
