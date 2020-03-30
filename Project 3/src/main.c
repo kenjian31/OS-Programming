@@ -11,6 +11,7 @@
 #include <limits.h>
 #include "vmemory.h"
 
+#define OUT_TLB "../bin/tlb_out.txt"
 #define INPUT_FILE "../bin/virtual.txt"
 #define MSB_20BITS 0xfffff000
 
@@ -36,6 +37,20 @@ int main(int argc, char* argv[])
 	char* cont = NULL;
 	size_t length = 0;
 	ssize_t read;
+
+
+	char text[] = "Before virtual address translation of virtual.txt\n";
+	char text1[] = "After virtual address translation of virtual.tx\n";
+	FILE * fp = fopen(OUT_TLB, "w");
+	if(fp == NULL)
+	{
+		printf("Read Error\n");
+	}
+	fprintf(fp, "%s", text);
+	fclose(fp);
+
+
+
 	while((read = getline(&cont,&length,fd)) != -1)
 	{
 		char* str;
@@ -44,6 +59,17 @@ int main(int argc, char* argv[])
 		int offset = vadd & 0xffff00000;
 
 		print_tlb();
+
+		int mem = translate_virtual_address(vadd);
+
+		FILE * fp1 = fopen(OUT_TLB, "a");
+		if(fp1 == NULL)
+		{
+			printf("Read Error\n");
+		}
+		fprintf(fp1, "%s", text1);
+		fclose(fp1);
+
 		print_physical_address(1, offset);
 		if(get_tlb_entry(vadd_pn) == -1) {
 			populate_tlb(vadd_pn, translate_virtual_address(vadd));
