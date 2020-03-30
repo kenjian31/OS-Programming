@@ -60,10 +60,11 @@ void print_physical_address(int frame, int offset)
     printf("-1\n");
   }
   else{
-    printf("0x%08x\n", frame+offset);
+    printf("0x%08x\n", (frame<<12)+offset);
   }
 	return;
 }
+
 
 int get_tlb_entry(int n)
 {
