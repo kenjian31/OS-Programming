@@ -8,10 +8,17 @@
 #include "vmemory.h"
 
 #define OUT_TLB "../bin/tlb_out.txt"
+#define TLB_SIZE 8
 
 bool FIFO_policy = true;
 int **cr3;
-
+struct entry {
+   int key;
+   int val;
+} tlb[TLB_SIZE];
+int next = 0;
+int lookup = 0;
+int hit = 0;
 //
 // More static functions can be implemented here
 //
@@ -44,26 +51,45 @@ void print_physical_address(int frame, int offset)
 }
 
 int get_tlb_entry(int n)
-{
-	//TODO
+{	
+	if (n<=0)
+		return -1;
+	lookup++;
+	for (int i=0;i<TLB_SIZE;i++) {
+		if (tlb[i].key==n){
+			hit++;
+			return tlb[i].val;
+		}
+	}
 	return -1;
 }
 
 void populate_tlb(int v_addr, int p_addr) 
 {
-	//TODO
+	tlb[next].key=v_addr;
+	tlb[next].val=p_addr;
+	next = (next+1)%TLB_SIZE;
 	return;
 }
 
 float get_hit_ratio()
 {
-	//TODO
-	return 0.0;
+	return hit/(float)lookup;
 }
 
 //Write to the file in OUT_TLB
 void print_tlb()
 {
-	//TODO
+	FILE *fp;
+	fp = fopen(OUT_TLB, "a");
+	for (int i=0;i<TLB_SIZE;i++) {
+		if (tlb[i].key<=0) {
+			fprintf(fp, "-1 -1\n");
+		} else {
+			fprintf(fp, "0x%05x 0x%05x\n", tlb[i].key, tlb[i].val);
+		}
+	}
+	fprintf(fp, "\n");
+	fclose(fp);
 	return;
 }
