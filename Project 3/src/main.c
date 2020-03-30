@@ -58,16 +58,18 @@ int main(int argc, char* argv[])
 		char* str;
 		unsigned int vadd = strtoul(cont, NULL, 16);
 		unsigned int vadd_pn = (vadd & 0xfffff000) >> 12;
-		int offset = vadd & 0xffff00000;
+		int offset = vadd &0xfff;
 
-		int mem = translate_virtual_address(vadd);
+		// int mem = translate_virtual_address(vadd);
 
 
-		print_physical_address(1, offset);
 		if(get_tlb_entry(vadd_pn) == -1) {
 			populate_tlb(vadd_pn, translate_virtual_address(vadd));
 		}
+
+		print_physical_address(translate_virtual_address(vadd), offset);
 	}
+	printf("Hit rate of the cache is %f\n", get_hit_ratio());
 	FILE * fp1 = fopen(OUT_TLB, "a");
 	if(fp1 == NULL)
 	{
