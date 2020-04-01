@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 #include "vmemory.h"
 
 #define OUT_TLB "../bin/tlb_out.txt"
@@ -15,6 +16,7 @@ int **cr3;
 struct entry {
    int key;
    int val;
+   int time;
 } tlb[TLB_SIZE];
 int next = 0;
 int lookup = 0;
@@ -74,6 +76,7 @@ int get_tlb_entry(int n)
 	for (int i=0;i<TLB_SIZE;i++) {
 		if (tlb[i].key==n){
 			hit++;
+			tlb[i].time = clock();
 			return tlb[i].val;
 		}
 	}
@@ -82,9 +85,28 @@ int get_tlb_entry(int n)
 
 void populate_tlb(int v_addr, int p_addr)
 {
-	tlb[next].key=v_addr;
-	tlb[next].val=p_addr;
-	next = (next+1)%TLB_SIZE;
+	if (FIFO_policy) {
+		tlb[next].key=v_addr;
+		tlb[next].val=p_addr;
+		tlb[next].time=clock();
+		next = (next+1)%TLB_SIZE;
+		return;
+	}
+	int lru = 0;
+	int ltime = tlb[0].time;
+	for (int i=0;i<TLB_SIZE;i++) {
+		if (tlb[i].time==0){
+			lru = i;
+			break;
+		}
+		if (tlb[i].time<ltime) {
+			ltime = tlb[i].time;
+			lru = i;
+		}
+	}
+	tlb[lru].key=v_addr;
+	tlb[lru].val=p_addr;
+	tlb[lru].time=clock();
 	return;
 }
 
