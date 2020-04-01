@@ -39,8 +39,8 @@ int main(int argc, char* argv[])
 	ssize_t read;
 
 
-	char text[] = "Before virtual address translation of virtual.txt\n";
-	char text1[] = "After virtual address translation of virtual.tx\n";
+	char text[] = "Before virtual address translation of virtual.txt\n\n";
+	char text1[] = "After virtual address translation of virtual.tx\n\n";
 	FILE * fp = fopen(OUT_TLB, "w");
 	if(fp == NULL)
 	{
