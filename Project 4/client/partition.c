@@ -59,7 +59,7 @@ void partition(char* path, int num, FILE *fa[], int index) {
 int main(int argc, char *argv[])
 {
   char path[1000] = ".";
-  if (argc < 2) {
+  if (argc != 3) {
     fprintf(stderr, "Wrong arguments.\n");
     exit(1);
 
