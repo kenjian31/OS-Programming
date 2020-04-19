@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include "server.h"
 
 void add_count(int alphai, int add){
      char_count[alphai] += add;
@@ -26,4 +22,4 @@ void count(char *file){
     for(int i = 0; i<26; i++){
          add_count(i, char_count_local[i]);
          }
-}#include "server.h"
+}
