@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<sys/wait.h>
 #include <dirent.h>
 
 void partition(char* path, int num, FILE *fa[], int index);
