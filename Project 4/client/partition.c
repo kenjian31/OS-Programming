@@ -7,6 +7,7 @@
 #include<sys/stat.h>
 #include<sys/types.h>
 #include <dirent.h>
+#include<sys/wait.h>
 
 #define MAX_PATH_LEN (256)
 
@@ -65,33 +66,79 @@ int main(int argc, char *argv[])
 
     }
  else {
-    strcpy(path,argv[1]);
-    int num = atoi(argv[2]);
-    int index = 1;
+   strcpy(path,argv[1]);
+   int num = atoi(argv[2]);
+   int index = 1;
 
-    if (path[strlen(path)-1]=='/')
+   if (path[strlen(path)-1]=='/')
+   {
+     path[strlen(path)-1]='\0';
+   }
+
+   char * dirname = "ClientInput";
+   mkdir(dirname, 0777);
+
+   // path[strlen(path)-1] = '\0';
+   FILE *fa[num];
+   for (int i = 0; i < num; i++)
+   {
+       char filename[20];
+       sprintf(filename, "ClientInput/Client%d.txt", i);
+       fa[i] = fopen(filename, "w+");
+   }
+
+   partition(path,num, fa, index);
+
+   for(int i = 0; i < num; i++)
+   {
+     fclose(fa[i]);
+   }
+    pid_t p1;
+    char rline[2560];
+    FILE *fq[num];
+
+    // create num chiild processes
+    for(int j = 0; j < num; j++)
     {
-      path[strlen(path)-1]='\0';
-    }
+      if((p1 = fork()) == 0)
+      {
+        char file[20];
+        // child process read through Clientj.txt file
+        sprintf(file, "ClientInput/Client%d.txt", j);
+        fq[j] = fopen(file, "r");
 
-    char * dirname = "ClientInput";
-    mkdir(dirname, 0777);
+        // used for testing whether the child process created successfully
+        // printf("this is child_%d, [son] pid %d from [parent] pid %d\n", j, getpid(), getppid());
 
-    // path[strlen(path)-1] = '\0';
-    FILE *fa[num];
-    for (int i = 0; i < num; i++)
-    {
-        char filename[20];
-        sprintf(filename, "ClientInput/Client%d.txt", i+1);
-        fa[i] = fopen(filename, "w+");
-    }
+	     if(fq[j]==NULL)
+	     {
+         printf("can not load file!");
+         return 1;
+	     }
+       // used for testing how many line of file content that each child process go through
+       // int count = 0;
 
-    partition(path,num, fa, index);
+       // go through related Client file and until reach the end of file
+	     while(!feof(fq[j]))
+	     {
+         // rline store the current line of file content
+     		 fgets(rline, sizeof(rline), fq[j]);
 
-    for(int i = 0; i < num; i++)
-    {
-      fclose(fa[i]);
+         // if read line successed count++
+         // count++;
+     	 }
+
+       // After finishing read the current Client file, close it. And j will plus 1, which will be the
+       // next Client file
+       fclose(fq[j]);
+       // check the count to ensure the whether the child process read all line
+       // printf("%d\n", count);
+
+       return 0;
+      }
     }
-    }
+    for(int a = 0; a < num; a++)
+      wait(NULL);
+  }
     return 0;
 }
