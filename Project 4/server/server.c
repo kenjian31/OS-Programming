@@ -23,3 +23,42 @@ void count(char *file){
          add_count(i, char_count_local[i]);
          }
 }
+
+
+# Not tested
+# Assume First arg is an array of file path, second arg is number of threads
+int main(int argc, char *argv[]){
+  # Create c threads
+  int num_threads = atoi(argv[2]);
+  p_thread threads[num_threads];
+  for (int i = 0; i < num_threads; i++){
+    pthread_create(&threads[i], NULL, (void *)count, NULL);
+  }
+
+  # Create Mutex 
+  pthread_mutex_t mut;
+
+  # for each thread
+   for (int i = 0; i < num_threads; i++){
+      pthread_mutex_lock(&mut);
+
+      # receive a file path
+      # count and update thread
+      count(argv[1][i]);
+
+      # loop until receive END ??
+
+
+      pthread_mutex_unlock(&mut);
+  }
+
+    # Wait all thread to finish
+   for (int i = 0; i < num_threads; i++){
+     pthread_join(threads[i],NULL);
+  }
+
+  # send final result
+
+
+
+}

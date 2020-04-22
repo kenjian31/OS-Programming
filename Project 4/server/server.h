@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
 #ifndef SERVER_H
 #define SERVER_H
